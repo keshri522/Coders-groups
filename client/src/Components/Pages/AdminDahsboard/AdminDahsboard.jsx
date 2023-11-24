@@ -1,52 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Assuming roleOptions array is fetched from an API or defined elsewhere
-const roleOptions = {
-  "Master admin": [
-    {
-      title: "Training",
-      description: "New Orders",
-      icon: "ion ion-bag",
-      class: "bg-info",
-      link: "C.php",
-    },
-    // ... other options for Master admin
-  ],
-  Training: [
-    {
-      title: "Counsulting",
-      description: "New Orders",
-      icon: "ion ion-bag",
-      class: "bg-info",
-      link: "C.php",
-    },
-    // ... other options for Training
-  ],
-  Counsulting: [
-    {
-      title: "Analytics",
-      description: "Bounce Rate",
-      icon: "ion ion-stats-bars",
-      class: "bg-success",
-      link: "C.php",
-    },
-    // ... other options for Counseling
-  ],
-  Analytics: [
-    {
-      title: "Others",
-      description: "User Registrations",
-      icon: "ion ion-person-add",
-      class: "bg-warning",
-      link: "create_ana.php",
-    },
-    // ... other options for Analytics
-  ],
-};
 
 const AdminDashboard = () => {
+  const [data, setData] = useState([
+    {
+      title: "Counsulting",
+      items: [
+        {
+          title: "New Orders",
+          description: "Bounce Rate",
+          icon: "ion ion-bag",
+          class: "bg-info",
+        },
+        // ... other options for Training
+      ],
+    },
+    {
+      title: "Training",
+      items: [
+        {
+          title: "Bounce Rate",
+          description: "Bounce Rate",
+          icon: "ion ion-stats-bars",
+          class: "bg-success",
+        },
+        // ... other options for Counseling
+      ],
+    },
+    {
+      title: "Analytics",
+      items: [
+        {
+          title: "User Registrations",
+          description: "User Registrations",
+          icon: "ion ion-person-add",
+          class: "bg-warning",
+        },
+        // ... other options for Analytics
+      ],
+    },
+    // ... other options for the main array
+  ]);
   // Get all options from all roles
-  const allOptions = Object.values(roleOptions).flat();
 
   return (
     <div className="content-wrapper">
@@ -55,16 +51,16 @@ const AdminDashboard = () => {
       </div>
       <section className="content">
         <div className="container-fluid">
-          <div className="row">
-            {allOptions.map((option, index) => (
+          <div className="row d-flex justify-content-around">
+            {data.map((option, index) => (
               <div key={index} className="col-lg-3 col-6">
-                <div className={`small-box ${option.class}`}>
+                <div className={`small-box ${option.items[0].class}`}>
                   <div className="inner">
                     <h3>{option.title}</h3>
-                    <p>{option.description}</p>
+                    <p>{option.items[0].description}</p>
                   </div>
                   <div className="icon">
-                    <i className={option.icon}></i>
+                    <i className={option.items[0].icon}></i>
                   </div>
                   <a href={option.link} className="small-box-footer">
                     More info <i className="fas fa-arrow-circle-right"></i>

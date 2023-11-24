@@ -11,7 +11,7 @@ function App() {
       <MainSidebar></MainSidebar>
       {/* <AddAnalytics></AddAnalytics> */}
       <AdminDashboard></AdminDashboard>
-      <CardsComponent></CardsComponent>
+      {/* <CardsComponent></CardsComponent> */}
     </div>
   );
 }
