@@ -1,17 +1,16 @@
 import "./App.css";
 import Navbar from "./Components/Pages/Navbar/Nav";
 import MainSidebar from "./Components/Pages/Sidebar/Sidebar";
-import AddAnalytics from "./Components/Pages/Analytics/Analytic";
-import CardsComponent from "./Components/Pages/Dashboard/Dashboard";
-import AdminDashboard from "./Components/Pages/AdminDahsboard/AdminDahsboard";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import Router from "./Components/Router/Routes";
 function App() {
   return (
     <div className="App">
       <Navbar></Navbar>
+      <ToastContainer></ToastContainer>
       <MainSidebar></MainSidebar>
-      {/* <AddAnalytics></AddAnalytics> */}
-      <AdminDashboard></AdminDashboard>
-      {/* <CardsComponent></CardsComponent> */}
+      <Router></Router>
     </div>
   );
 }

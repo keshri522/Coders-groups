@@ -1,5 +1,6 @@
 // this componets show a navbar valong with drop down actions
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false); // handle the local state of the componetns
   const dropdownRef = useRef(null); // for the reference to maipulate the dfom directs
@@ -38,14 +39,14 @@ const Navbar = () => {
           </a>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <a href="../admin/index.php" className="nav-link">
+          <Link to="/" className="nav-link">
             Home
-          </a>
+          </Link>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <a href="#" className="nav-link">
+          <Link to="/" className="nav-link">
             Contact
-          </a>
+          </Link>
         </li>
       </ul>
 
@@ -61,16 +62,6 @@ const Navbar = () => {
           User
         </button>
         <ul className={`dropdown-menu${isDropdownOpen ? " show" : ""}`}>
-          <li>
-            <a className="dropdown-item" href="#">
-              Another Action
-            </a>
-          </li>
-          <li>
-            <a className="dropdown-item" href="#">
-              Something else here
-            </a>
-          </li>
           <button
             type="button"
             onClick={handleLogout}

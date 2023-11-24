@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Assuming roleOptions array is fetched from an API or defined elsewhere
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([
     {
       title: "Counsulting",
@@ -12,6 +14,7 @@ const AdminDashboard = () => {
           description: "Bounce Rate",
           icon: "ion ion-bag",
           class: "bg-info",
+          paths: "consultingpage",
         },
         // ... other options for Training
       ],
@@ -24,6 +27,7 @@ const AdminDashboard = () => {
           description: "Bounce Rate",
           icon: "ion ion-stats-bars",
           class: "bg-success",
+          paths: "trainingpage",
         },
         // ... other options for Counseling
       ],
@@ -35,14 +39,29 @@ const AdminDashboard = () => {
           title: "User Registrations",
           description: "User Registrations",
           icon: "ion ion-person-add",
-          class: "bg-warning",
+          class: "bg-danger",
+          paths: "analytics",
         },
-        // ... other options for Analytics
       ],
     },
-    // ... other options for the main array
+    {
+      title: "Others",
+      items: [
+        {
+          title: "Others",
+          description: "Other Options",
+          icon: "ion ion-pie-graph",
+          class: "bg-secondary",
+          paths: "others",
+        },
+      ],
+    },
   ]);
-  // Get all options from all roles
+  // this function will redircet user to particular page
+  const handleLinkClick = (destination) => {
+    navigate(`/${destination}`);
+    // console.log(destination);
+  };
 
   return (
     <div className="content-wrapper">
@@ -55,16 +74,23 @@ const AdminDashboard = () => {
             {data.map((option, index) => (
               <div key={index} className="col-lg-3 col-6">
                 <div className={`small-box ${option.items[0].class}`}>
-                  <div className="inner">
+                  <div className="inners">
                     <h3>{option.title}</h3>
                     <p>{option.items[0].description}</p>
                   </div>
                   <div className="icon">
                     <i className={option.items[0].icon}></i>
                   </div>
-                  <a href={option.link} className="small-box-footer">
-                    More info <i className="fas fa-arrow-circle-right"></i>
-                  </a>
+                  <div
+                    // sending dynamic data of title based on that we will redircts user
+                    onClick={() => handleLinkClick(option.items[0].paths)}
+                    className="small-box-footer"
+                  >
+                    <label type="button">
+                      {" "}
+                      More info <i className="fas fa-arrow-circle-right"></i>
+                    </label>
+                  </div>
                 </div>
               </div>
             ))}
