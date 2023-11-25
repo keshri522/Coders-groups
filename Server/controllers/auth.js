@@ -27,15 +27,26 @@ const TraningData = async (req, res) => {
     res.status(400).json({ error: "Bad Request" });
   }
 };
-// this is for the posting all the data int the Cnsulting dastabse
+
 const ConsultingDataa = async (req, res) => {
   const { title, description } = req.body.data; // destructure the data from body
-  const imageUrl = req.body.url; // assuming the URL is provided in the body directly
-  // console.log(imageUrl, title.description); // just for debugging
+  const imageUrl = req.body.url;
+  const id = req.body.id;
+  // console.log(title, description, imageUrl, id); just for debugging
   try {
-    const sql =
-      "INSERT INTO consultingdataa (Title, Description, URL) VALUES (?, ?, ?)";
-    const values = [title, description, imageUrl];
+    let sql, values;
+
+    if (id) {
+      // If id is present, update the existing record
+      sql =
+        "INSERT INTO consultingdataa (ID, Title, Description, URL) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE Title=?, Description=?, URL=?";
+      values = [id, title, description, imageUrl, title, description, imageUrl];
+    } else {
+      // If id is not present, insert a new record
+      sql =
+        "INSERT INTO consultingdataa (Title, Description, URL) VALUES (?, ?, ?)";
+      values = [title, description, imageUrl];
+    }
 
     connection.query(sql, values, (error, result) => {
       if (error) {
@@ -45,12 +56,16 @@ const ConsultingDataa = async (req, res) => {
 
       res.status(200).json({
         success: true,
+        message: id
+          ? "Data updated successfully"
+          : "Data inserted successfully",
       });
     });
   } catch (error) {
     res.status(400).json({ error: "Bad Request" });
   }
 };
+
 // this api will ftch all the data from the consultansydataa table
 
 const getAllConsultancyData = async (req, res) => {
@@ -117,10 +132,40 @@ const deleteConsultingData = (req, res) => {
     }
   });
 };
+// this api will return the data based on the id coming from frontend
+const getConsultancyDataById = async (req, res) => {
+  const { id } = req.query; // Assuming you pass the id as a URL parameter
+  // console.log(id);
+  try {
+    const sql = "SELECT * FROM consultingdataa WHERE ID = ?"; // Change the column and table name as needed
+    const values = [id];
+
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      if (result.length === 0) {
+        // If no data is found for the specified id
+        res.status(404).json({ error: "Data not found" });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: result[0], // Assuming you expect only one result
+      });
+    });
+  } catch (error) {
+    res.status(400).json({ error: "Bad Request" });
+  }
+};
 
 module.exports = {
   TraningData,
   ConsultingDataa,
   getAllConsultancyData,
   deleteConsultingData,
+  getConsultancyDataById,
 };

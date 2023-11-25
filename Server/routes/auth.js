@@ -7,10 +7,12 @@ const {
   ConsultingDataa,
   getAllConsultancyData,
   deleteConsultingData,
+  getConsultancyDataById,
 } = require("../controllers/auth");
 // this routes will handle all the data coming from the client side this is post route
 router.post("/tranning", TraningData);
 router.post("/consulting", ConsultingDataa);
 router.get("/getconsultingdata", getAllConsultancyData);
+router.get("/getconsultingdataId", getConsultancyDataById);
 router.post("/deleteitem", deleteConsultingData);
 module.exports = router;
