@@ -206,30 +206,30 @@ const allAdmins = async (req, res) => {
   }
 };
 // this method will delete the admins based on the id
-const deleteAdminById = async (req, res) => {
-  try {
-    const adminId = req.body.id; // first finding the id from frontend
-    console.log(adminId);
-    // this will first first find the row from that given tablse based on the id
-    const findAdminQuery = "SELECT * FROM admins WHERE id = ?";
-    const findAdminResult = await connection.query(findAdminQuery, [adminId]);
-    // f no rows are found then return back a response
-    if (findAdminResult.length === 0) {
-      return res.status(404).json({ message: "Admin not found" });
-    }
-    // now deeleting the rows from the given tbalse based on the id
-    const deleteAdminQuery = "DELETE FROM admins WHERE id = ?";
-    await connection.query(deleteAdminQuery, [adminId]);
-    // sending back all the remaning rows that will shown in the frotned
-    const remainingAdminsQuery = "SELECT * FROM admins";
-    const remainingAdmins = await connection.query(remainingAdminsQuery);
+// const deleteAdminById = async (req, res) => {
+//   try {
+//     const adminId = req.body.id; // first finding the id from frontend
+//     console.log(adminId);
+//     // this will first first find the row from that given tablse based on the id
+//     const findAdminQuery = "SELECT * FROM admins WHERE id = ?";
+//     const findAdminResult = await connection.query(findAdminQuery, [adminId]);
+//     // f no rows are found then return back a response
+//     if (findAdminResult.length === 0) {
+//       return res.status(404).json({ message: "Admin not found" });
+//     }
+//     // now deeleting the rows from the given tbalse based on the id
+//     const deleteAdminQuery = "DELETE FROM admins WHERE id = ?";
+//     await connection.query(deleteAdminQuery, [adminId]);
+//     // sending back all the remaning rows that will shown in the frotned
+//     const remainingAdminsQuery = "SELECT * FROM admins";
+//     const remainingAdmins = await connection.query(remainingAdminsQuery);
 
-    return res.status(200).json(remainingAdmins);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     return res.status(200).json(remainingAdmins);
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
 module.exports = {
   TraningData,
