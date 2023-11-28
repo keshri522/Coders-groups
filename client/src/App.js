@@ -4,12 +4,16 @@ import MainSidebar from "./Components/Pages/Sidebar/Sidebar";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Router from "./Components/Router/Routes";
+// getting al the admin roles from redux store
+import { useSelector } from "react-redux";
 function App() {
+  const adminroles = useSelector((state) => state.rootReducers.userLogin);
+
   return (
     <div className="App">
-      <Navbar></Navbar>
+      {adminroles ? <Navbar></Navbar> : ""}
       <ToastContainer></ToastContainer>
-      <MainSidebar></MainSidebar>
+      {adminroles ? <MainSidebar></MainSidebar> : ""}
       <Router></Router>
     </div>
   );

@@ -1,10 +1,21 @@
 // this componets show a navbar valong with drop down actions
 import React, { useState, useEffect, useRef } from "react";
+import axios, { all } from "axios";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loggedOutUser } from "../../Redux/Reducers/Loginreducers";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Navbar = () => {
+  const [admins, Setadmins] = useState([]); // for storing all the admins here
+  const adminroles = useSelector((state) => state.rootReducers.userLogin); // gettig the roles of admin from the redux
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isDropdownOpen, setDropdownOpen] = useState(false); // handle the local state of the componetns
   const dropdownRef = useRef(null); // for the reference to maipulate the dfom directs
   // to handle side effect of react applicatio i used useeffect hooks
+  // getting
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -23,9 +34,11 @@ const Navbar = () => {
     setDropdownOpen(!isDropdownOpen);
   };
 
+  // this function will remove the user from the redux as well as the local storage and navigate to the home page
   const handleLogout = () => {
-    // Add logout logic here
-    // console.log("Logging out..."); // just for debugging purposes
+    localStorage.removeItem("role"); // remove the role from local storage
+    dispatch(loggedOutUser("")); // also dispatched empy action which wll remove currnet role from redux
+    navigate("/");
     setDropdownOpen(false); // Close the dropdown after logout
   };
 
@@ -48,6 +61,24 @@ const Navbar = () => {
             Contact
           </Link>
         </li>
+        {adminroles && adminroles === "master" ? (
+          <li className="nav-item d-none d-sm-inline-block">
+            <Link to="/" className="nav-link">
+              Add Admin
+            </Link>
+          </li>
+        ) : (
+          ""
+        )}
+        {adminroles && adminroles === "master" ? (
+          <li className="nav-item d-none d-sm-inline-block">
+            <Link to="/admin/alladmins" className="nav-link">
+              Show Admins
+            </Link>
+          </li>
+        ) : (
+          ""
+        )}
       </ul>
 
       {/* Right navbar links */}
@@ -59,7 +90,7 @@ const Navbar = () => {
           aria-expanded={isDropdownOpen}
           onClick={handleDropdownToggle}
         >
-          User
+          {adminroles ? `${adminroles}` : "User"}
         </button>
         <ul className={`dropdown-menu${isDropdownOpen ? " show" : ""}`}>
           <button

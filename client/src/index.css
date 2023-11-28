@@ -41,7 +41,9 @@
   color:#2d3436;
   text-align: center;
 }
-
+.login{
+  margin-top: 5rem;
+}
 html {
   font-family: sans-serif;
   line-height: 1.15;

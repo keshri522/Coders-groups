@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 // Assuming roleOptions array is fetched from an API or defined elsewhere
 
 const AdminDashboard = () => {
+  const adminroles = useSelector((state) => state.rootReducers.userLogin);
   const navigate = useNavigate();
   const [data, setData] = useState([
     {
@@ -62,7 +63,69 @@ const AdminDashboard = () => {
     navigate(`/${destination}`);
     // console.log(destination);
   };
+  // i need to filter the data based on the data of the admin roles
+  // this functio will filter the cards based on the admin roles
+  const fetchAdminRoles = () => {
+    if (adminroles.includes("master")) {
+      setData(data);
+    } else if (adminroles.includes("traning")) {
+      setData([
+        {
+          title: "Training",
+          items: [
+            {
+              title: "Bounce Rate",
+              description: "Bounce Rate",
+              icon: "ion ion-stats-bars",
+              class: "bg-success",
+              paths: "trainingpage",
+            },
+            // ... other options for Counseling
+          ],
+        },
+      ]);
+    } else if (adminroles.includes("consulting")) {
+      setData([
+        {
+          title: "Counsulting",
+          items: [
+            {
+              title: "New Orders",
+              description: "Bounce Rate",
+              icon: "ion ion-bag",
+              class: "bg-info",
+              paths: "consultingpage",
+            },
+            // ... other options for Training
+          ],
+        },
+      ]);
+    }
+    // if none will match then else condtion vwill run
+    else {
+      setData([
+        {
+          title: "Others",
+          items: [
+            {
+              title: "Others",
+              description: "Other Options",
+              icon: "ion ion-pie-graph",
+              class: "bg-secondary",
+              paths: "others",
+            },
+          ],
+        },
+      ]);
+    }
+  };
+  useEffect(() => {
+    fetchAdminRoles();
+  }, [adminroles]); // based on the dependencies  it will run on that times if changes
 
+  // calling useeffect vot avoid unnecessary calling or avoid the side effect
+
+  // now store that function into a variable to access this
   return (
     <div className="content-wrapper">
       <div className="content-header">
@@ -71,7 +134,7 @@ const AdminDashboard = () => {
       <section className="content">
         <div className="container-fluid">
           <div className="row d-flex justify-content-around">
-            {data.map((option, index) => (
+            {data?.map((option, index) => (
               <div key={index} className="col-lg-3 col-6">
                 <div className={`small-box ${option.items[0].class}`}>
                   <div className="inners">
