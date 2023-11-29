@@ -52,7 +52,7 @@ const Navbar = () => {
           </a>
         </li>
         <li className="nav-item d-none d-sm-inline-block">
-          <Link to="/" className="nav-link">
+          <Link to="/admin" className="nav-link">
             Home
           </Link>
         </li>

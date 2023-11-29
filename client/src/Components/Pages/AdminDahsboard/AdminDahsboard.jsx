@@ -11,8 +11,8 @@ const AdminDashboard = () => {
       title: "Counsulting",
       items: [
         {
-          title: "New Orders",
-          description: "Bounce Rate",
+          title: "Consulting",
+          description: "Consulting",
           icon: "ion ion-bag",
           class: "bg-info",
           paths: "consultingpage",
@@ -24,8 +24,8 @@ const AdminDashboard = () => {
       title: "Training",
       items: [
         {
-          title: "Bounce Rate",
-          description: "Bounce Rate",
+          title: "Tranning",
+          description: "Tranning",
           icon: "ion ion-stats-bars",
           class: "bg-success",
           paths: "trainingpage",
@@ -37,8 +37,8 @@ const AdminDashboard = () => {
       title: "Analytics",
       items: [
         {
-          title: "User Registrations",
-          description: "User Registrations",
+          title: "Analytics",
+          description: "Analytics",
           icon: "ion ion-person-add",
           class: "bg-danger",
           paths: "analytics",
@@ -54,6 +54,18 @@ const AdminDashboard = () => {
           icon: "ion ion-pie-graph",
           class: "bg-secondary",
           paths: "others",
+        },
+      ],
+    },
+    {
+      title: "Internship",
+      items: [
+        {
+          title: "Internship",
+          description: "InternShip",
+          icon: "ion ion-pie-graph",
+          class: "bg-primary",
+          paths: "internship",
         },
       ],
     },

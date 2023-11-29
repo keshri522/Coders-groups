@@ -346,7 +346,155 @@ const deleteAdminById = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+// this is controllers for the internship cards controller
+const createInternship = async (req, res) => {
+  const { title, description, developedBy, durations, Selected } =
+    req.body.data;
+  const imageUrl = req.body.url;
+  const id = req.body.id;
 
+  try {
+    let sql, values;
+
+    if (id) {
+      // If id is present, update the existing record
+      sql =
+        "INSERT INTO internshipdata (ID, Title, Description, URL, DevelopedBy, Durations, Mode) VALUES (?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE Title=?, Description=?, URL=?, DevelopedBy=?, Durations=?, Mode=?";
+      values = [
+        id,
+        title,
+        description,
+        imageUrl,
+        developedBy,
+        durations,
+        Selected,
+        title,
+        description,
+        imageUrl,
+        developedBy,
+        durations,
+        Selected,
+      ];
+    } else {
+      // If id is not present, insert a new record
+      sql =
+        "INSERT INTO internshipdata (Title, Description, URL, DevelopedBy, Durations, Mode) VALUES (?, ?, ?, ?, ?, ?)";
+      values = [title, description, imageUrl, developedBy, durations, Selected];
+    }
+
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        // console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: id
+          ? "Data updated successfully"
+          : "Data inserted successfully",
+      });
+    });
+  } catch (error) {
+    // console.error(error);
+    res.status(400).json({ error: "Bad Request" });
+  }
+};
+// this api will delete the intership data based on the id
+const deleteeInternshipDataById = (req, res) => {
+  const internshipId = req.body.id; // finding the id coming from body
+
+  // First, retrieve the data that will be deleted
+  const selectSql = "SELECT * FROM internshipdata WHERE id = ?";
+  connection.query(selectSql, [internshipId], (selectErr, selectResult) => {
+    if (selectErr) {
+      res
+        .status(500)
+        .json({ success: false, message: "Internal Server Error" });
+    } else {
+      // Now, delete the data
+      const deleteSql = "DELETE FROM internshipdata WHERE id = ?";
+      connection.query(deleteSql, [internshipId], (deleteErr, deleteResult) => {
+        if (deleteErr) {
+          res
+            .status(500)
+            .json({ success: false, message: "Internal Server Error" });
+        } else {
+          // Retrieve all remaining data after deletion
+          const remainingDataSql = "SELECT * FROM internshipdata";
+          connection.query(
+            remainingDataSql,
+            (remainingErr, remainingResult) => {
+              if (remainingErr) {
+                res
+                  .status(500)
+                  .json({ success: false, message: "Internal Server Error" });
+              } else {
+                res.json({
+                  success: true,
+                  message: "Internship data deleted successfully",
+                  remainingData: remainingResult, // Send all remaining data
+                });
+              }
+            }
+          );
+        }
+      });
+    }
+  });
+};
+// this api will return all the internship data that wll be showing to the ui part
+const getAllInternShipData = async (req, res) => {
+  try {
+    const sql = "SELECT * FROM internshipdata"; // Change the table name as needed
+
+    connection.query(sql, (error, results) => {
+      if (error) {
+        // console.error("Error executing MySQL query: ", error);
+        res.status(500).json({ error: "No Data Found Please Add InternShip" });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: results,
+      });
+    });
+  } catch (error) {
+    // console.error("Error in getAllConsultancyData API: ", error);
+    res.status(400).json({ error: "Bad Request" });
+  }
+};
+// this api will return the particular rows based on the id user sent from the cleint side
+const getinternshipDatabyId = async (req, res) => {
+  const { id } = req.query; // Assuming you pass the id as a URL parameter
+
+  try {
+    const sql = "SELECT * FROM internshipdata WHERE ID = ?"; // Change the column and table name as needed
+    const values = [id];
+
+    connection.query(sql, values, (error, result) => {
+      if (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      if (result.length === 0) {
+        // If no data is found for the specified id
+        res.status(404).json({ error: "Data not found" });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: result[0], // Assuming you expect only one result
+      });
+    });
+  } catch (error) {
+    res.status(400).json({ error: "Bad Request" });
+  }
+};
 module.exports = {
   TraningData,
   ConsultingDataa,
@@ -359,4 +507,8 @@ module.exports = {
   deletetranningData,
   getalltranningData,
   gettrannigDatabyId,
+  createInternship,
+  deleteeInternshipDataById,
+  getAllInternShipData,
+  getinternshipDatabyId,
 };

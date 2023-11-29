@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
-const ShowmoreConsultancy = () => {
+const ShowMoreInternShip = () => {
   const [singleData, SetsingleDate] = useState([]);
   const [id, Setid] = useState();
   const [update, Setupdate] = useState(false); // handling the update state of the cards
@@ -12,10 +12,16 @@ const ShowmoreConsultancy = () => {
   const [data, Setdata] = useState({
     title: "",
     description: "",
+    developedBy: "",
+    durations: "",
+    Selected: "",
   });
   const [data2, Setdata2] = useState({
     title: "",
     description: "",
+    developedBy: "",
+    durations: "",
+    Selected: "",
   });
   const [preview1, Setpreview1] = useState(""); // just for showing the image in the ui
   const [url1, Seturl1] = useState("");
@@ -29,7 +35,7 @@ const ShowmoreConsultancy = () => {
   const getalldata = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/tranningdata`
+        `${process.env.REACT_APP_API_URL}/allinternships`
       );
       if (response.data.success) {
         //  for showing some dealy i am using debouncing
@@ -38,7 +44,7 @@ const ShowmoreConsultancy = () => {
         toast.error("Something went wrong");
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("No InternShip data Found Please Add");
     }
   };
 
@@ -103,7 +109,7 @@ const ShowmoreConsultancy = () => {
       };
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/tranning`,
+        `${process.env.REACT_APP_API_URL}/createInternship`,
         dataToSend
       );
 
@@ -112,10 +118,13 @@ const ShowmoreConsultancy = () => {
         //  for showing some dealy i am using debouncing
         setTimeout(() => {
           Setloading(false);
-          toast.success("Course Added Successfully");
+          toast.success("InternShip Added Successfully");
           Setdata({
             title: "",
             description: "",
+            developedBy: "",
+            durations: "",
+            Selected: "",
           });
           Setpreview("");
           Seturl("");
@@ -133,6 +142,7 @@ const ShowmoreConsultancy = () => {
 
   // this function will handle all the changes in the input tag
   const HandleChange = (e) => {
+    // console.log(e.target.name, e.target.value);
     const { name, value } = e.target;
     // console.log(name, value); just for debugging
     Setdata({ ...data, [name]: value });
@@ -146,7 +156,7 @@ const ShowmoreConsultancy = () => {
   const deleteService = async (index) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/deletetranningdata`,
+        `${process.env.REACT_APP_API_URL}/deleteinternship`,
         {
           id: index,
         }
@@ -155,7 +165,7 @@ const ShowmoreConsultancy = () => {
       Setalldata(response.data.remainingData);
       // Handle success, update your state or perform any other necessary actions
     } catch (error) {
-      // console.error("Error deleting service:", error.message);
+      console.error("Error deleting internship:", error.message);
       // Handle the error, show a notification or perform other error-handling actions
     }
   };
@@ -166,7 +176,7 @@ const ShowmoreConsultancy = () => {
     Setpreview1("");
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/gettranningdataId`,
+        `${process.env.REACT_APP_API_URL}/getinternshipbyid`,
         {
           params: {
             id: id,
@@ -181,6 +191,9 @@ const ShowmoreConsultancy = () => {
         Setdata2({
           title: response.data.data.Title,
           description: response.data.data.Description,
+          developedBy: response.data.data.DevelopedBy,
+          durations: response.data.data.Durations,
+          Selected: response.data.data.Mode,
         });
       } else {
         toast.error("Something went wrong");
@@ -203,7 +216,7 @@ const ShowmoreConsultancy = () => {
       };
       // console.log(dataToSend);
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/tranning`,
+        `${process.env.REACT_APP_API_URL}/createInternship`,
         dataToSend
       );
       if (response.data.success) {
@@ -214,6 +227,9 @@ const ShowmoreConsultancy = () => {
           Setdata2({
             title: "",
             description: "",
+            developedBy: "",
+            durations: "",
+            Selected: "",
           });
           Setpreview1("");
           Seturl1("");
@@ -235,18 +251,18 @@ const ShowmoreConsultancy = () => {
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-8 ">
-              <h2 className="text-primary">Tranning Dashboard</h2>
+              <h2 className="text-primary">Internship Dashboard</h2>
               <div className="row">
                 {/* Sample cards with random data */}
                 {/* need to call the api which will show all the data based on the database have */}
                 {/* Use map to dynamically render cards based on alldata */}
                 {alldata.map((item) => (
-                  <div className="col-md-6 mb-3" key={item.id}>
+                  <div className="col-md-6 mb-3" key={item.ID}>
                     <div className="card  bg-secondary">
                       <div className="card-body">
                         <div className="d-flex justify-content-between align-items-center">
                           <button
-                            onClick={() => OpenModal(item.id)}
+                            onClick={() => OpenModal(item.ID)}
                             type="button"
                             className="btn btn-warning"
                           >
@@ -258,12 +274,33 @@ const ShowmoreConsultancy = () => {
                             alt=""
                           />
                           <button
-                            onClick={() => deleteService(item.id)}
+                            onClick={() => deleteService(item.ID)}
                             type="button"
                             className="btn btn-danger"
                           >
                             <FaTrashAlt size={10}></FaTrashAlt>
                           </button>
+                        </div>
+                        <hr />
+                        <div className="d-flex justify-content-between">
+                          <div>
+                            <label className="text-dark" htmlFor="">
+                              DevelopedBy
+                            </label>
+                            <h5 className="">{item.DevelopedBy}</h5>
+                          </div>
+                          <div>
+                            <label className="text-dark" htmlFor="">
+                              Duratons
+                            </label>
+                            <h5>{item.Durations}</h5>
+                          </div>
+                          <div>
+                            <label className="text-dark" htmlFor="">
+                              Mode
+                            </label>
+                            <h5>{item.Mode}</h5>
+                          </div>
                         </div>
                         <div className="mt-2 d-flex justify-content-center ">
                           <h4
@@ -311,7 +348,7 @@ const ShowmoreConsultancy = () => {
                   </button>
                 </>
               ) : (
-                <h1 className="text-primary">Add Service</h1>
+                <h1 className="text-primary">Add Internship</h1>
               )}
               <form>
                 <div className="mb-3">
@@ -323,7 +360,7 @@ const ShowmoreConsultancy = () => {
                     value={data.title}
                     required
                     onChange={HandleChange}
-                    placeholder="Add Tranning Title"
+                    placeholder="Add Intership Title"
                   />
                 </div>
                 <div className="mb-3">
@@ -335,9 +372,46 @@ const ShowmoreConsultancy = () => {
                     name="description"
                     required
                     onChange={HandleChange}
-                    placeholder="Add Tranning Description"
+                    placeholder="Add Internship Details"
                   />
                 </div>
+                <div className="mb-3">
+                  <input
+                    value={data.developedBy}
+                    type="text"
+                    className="form-control"
+                    id="description"
+                    name="developedBy"
+                    required
+                    onChange={HandleChange}
+                    placeholder="Developed By"
+                  />
+                </div>
+                <div className="mb-3">
+                  <input
+                    value={data.durations}
+                    type="text"
+                    className="form-control"
+                    id="description"
+                    name="durations"
+                    required
+                    onChange={HandleChange}
+                    placeholder="Durations"
+                  />
+                </div>
+
+                <select
+                  value={data.Selected}
+                  onChange={HandleChange}
+                  name="Selected"
+                  className={`mb-3 form-control ${
+                    data.Selected ? "bg-secondary" : ""
+                  }`}
+                >
+                  <option value="">Select Mode</option>
+                  <option value="Online">Online</option>
+                  <option value="Offline">Offline</option>
+                </select>
 
                 <label
                   htmlFor="fileInput"
@@ -362,7 +436,7 @@ const ShowmoreConsultancy = () => {
                   type="submit"
                   className="btn btn-outline-primary w-100"
                 >
-                  {loading ? "...Adding" : "Add Service"}
+                  {loading ? "...Adding" : "Add Intern"}
                 </button>
               </form>
               <hr />
@@ -407,7 +481,7 @@ const ShowmoreConsultancy = () => {
                         value={data2.title}
                         required
                         onChange={HandleChange1}
-                        placeholder="Add Tranning Title"
+                        placeholder="Add Internship Title"
                       />
                     </div>
                     <div className="mb-3">
@@ -419,9 +493,46 @@ const ShowmoreConsultancy = () => {
                         name="description"
                         required
                         onChange={HandleChange1}
-                        placeholder="Add Tranning Description"
+                        placeholder="Add Internship Details"
                       />
                     </div>
+                    <div className="mb-3">
+                      <input
+                        value={data2.developedBy}
+                        type="text"
+                        className="form-control"
+                        id="description"
+                        name="developedBy"
+                        required
+                        onChange={HandleChange1}
+                        placeholder="Developed By"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <input
+                        value={data2.durations}
+                        type="text"
+                        className="form-control"
+                        id="description"
+                        name="durations"
+                        required
+                        onChange={HandleChange1}
+                        placeholder="Durations"
+                      />
+                    </div>
+
+                    <select
+                      value={data2.Selected}
+                      onChange={HandleChange1}
+                      name="Selected"
+                      className={`mb-3 form-control ${
+                        data2.Selected ? "bg-secondary" : ""
+                      }`}
+                    >
+                      <option value="">Select Mode</option>
+                      <option value="Online">Online</option>
+                      <option value="Offline">Offline</option>
+                    </select>
 
                     <label
                       htmlFor="fileInputs"
@@ -446,7 +557,7 @@ const ShowmoreConsultancy = () => {
                       type="submit"
                       className="btn btn-outline-primary w-100"
                     >
-                      {loading ? "...Updating" : "Update Service"}
+                      {loading ? "...Updating" : "Update Intern"}
                     </button>
                   </form>
                 </>
@@ -461,4 +572,4 @@ const ShowmoreConsultancy = () => {
   );
 };
 
-export default ShowmoreConsultancy;
+export default ShowMoreInternShip;

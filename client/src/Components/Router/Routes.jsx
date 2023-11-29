@@ -5,6 +5,7 @@ import AdminDashboard from "../Pages/AdminDahsboard/AdminDahsboard";
 import ShowmoreConsultancy from "../Pages/ShowMoreConsultancy/ShowmoreConsultancy";
 import Homepage from "../Home/Homepage";
 import Alladmins from "../Alladmins/Alladmins";
+import ShowMoreInternShip from "../Pages/ShowMoreInternship/ShowmoreInternship";
 const Router = () => {
   return (
     <>
@@ -25,6 +26,10 @@ const Router = () => {
         <Route
           path="/admin/alladmins"
           element={<Alladmins></Alladmins>}
+        ></Route>
+        <Route
+          path="/internship"
+          element={<ShowMoreInternShip></ShowMoreInternShip>}
         ></Route>
       </Routes>
     </>
