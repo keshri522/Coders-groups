@@ -252,6 +252,11 @@ const ShowmoreConsultancy = () => {
                           >
                             <FaEdit size={10}></FaEdit>
                           </button>
+                          <img
+                            style={{ height: "80px", width: "80px" }}
+                            src={item.URL}
+                            alt=""
+                          />
                           <button
                             onClick={() => deleteService(item.id)}
                             type="button"

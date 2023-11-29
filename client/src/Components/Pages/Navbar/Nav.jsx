@@ -61,15 +61,7 @@ const Navbar = () => {
             Contact
           </Link>
         </li>
-        {adminroles && adminroles === "master" ? (
-          <li className="nav-item d-none d-sm-inline-block">
-            <Link to="/" className="nav-link">
-              Add Admin
-            </Link>
-          </li>
-        ) : (
-          ""
-        )}
+
         {adminroles && adminroles === "master" ? (
           <li className="nav-item d-none d-sm-inline-block">
             <Link to="/admin/alladmins" className="nav-link">

@@ -28,6 +28,7 @@ const Alladmins = () => {
   }, [deletes]); // this will handle the side effect of the this component
   //   console.log(data); for debugging
   // this function will delete the admis
+
   const DeleteAdmin = async (id) => {
     Setdeletes(true);
     console.log(id);
@@ -45,6 +46,7 @@ const Alladmins = () => {
         toast.success("Deleted Admin Successfully");
       }
     } catch (error) {
+      Setdeletes(false);
       //   console.log(error);
       toast.error("Something went wrong");
     }

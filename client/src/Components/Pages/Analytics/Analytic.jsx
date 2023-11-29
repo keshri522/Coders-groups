@@ -36,7 +36,7 @@ const AddAnalytics = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+    // console.log("datalis");
     // try {
     //   const response = await fetch("api/add_ana", {
     //     method: "POST",
